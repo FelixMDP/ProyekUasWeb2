@@ -15,8 +15,8 @@ class Transaksi extends Model
     // Define which attributes are mass assignable
     protected $fillable = [
         'IDTransaksi',
-        'IDProducts',
-        'IDAnggota',
+        'IDProduk',
+        'IDUser',
         'Pendapatan',
         'Tgl_Transaksi',
         'Waktu_Transaksi',

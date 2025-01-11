@@ -19,11 +19,11 @@ class ProductController extends Controller
         ]);
 
         Products::create([
-            'IDAnggota' => $request->IDAnggota,
-            'Nama_Anggota' => $request->Nama_Anggota,
-            'Alamat' => $request->Alamat,
-            'Jurusan' => $request->Jurusan,
-            'IDDaftar' => $request->IDDaftar,
+            'IDProduk' => $request->IDProduk,
+            'Image_Path' => $request->Image_Path,
+            'Nama_Produk' => $request->Nama_Produk,
+            'Jumlah_Stok' => $request->Jumlah_Stok,
+            'Harga' => $request->Harga,
         ]);
 }
 }
