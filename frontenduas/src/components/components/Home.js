@@ -11,75 +11,98 @@ const Home = () => {
     navigate("/products");
   };
 
-  // Extended list of featured products, including non-fruit items
+  const addToCart = (product) => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Check if the product already exists in the cart
+    const existingProductIndex = cart.findIndex(
+      (item) => item.id === product.id
+    );
+
+    if (existingProductIndex !== -1) {
+      // If the product is already in the cart, increase the quantity
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      // If the product is not in the cart, add it with quantity 1
+      product.quantity = 1;
+      cart.push(product);
+    }
+
+    // Save the updated cart to localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert(`${product.name} has been added to your cart!`);
+  };
+
   const featuredProducts = [
     {
       id: 1,
       name: "Apple",
-      price: 1.2,
+      price: 12000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Apple",
     },
     {
       id: 2,
       name: "Banana",
-      price: 0.8,
+      price: 8000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Banana",
     },
     {
       id: 3,
       name: "Orange",
-      price: 1.5,
+      price: 15000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Orange",
     },
     {
       id: 4,
       name: "Flour",
-      price: 0.5,
+      price: 5000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Flour",
     },
     {
       id: 5,
       name: "Sugar",
-      price: 0.6,
+      price: 6000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Sugar",
     },
     {
       id: 6,
       name: "Cooking Oil",
-      price: 2.0,
+      price: 20000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Cooking+Oil",
     },
     {
       id: 7,
       name: "Mango",
-      price: 2.0,
+      price: 20000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Mango",
     },
     {
       id: 8,
       name: "Pineapple",
-      price: 1.8,
+      price: 18000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Pineapple",
     },
     {
       id: 9,
       name: "Rice",
-      price: 1.3,
+      price: 13000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Rice",
     },
     {
       id: 10,
       name: "Salt",
-      price: 0.4,
+      price: 4000, // Changed to RP
       image: "https://via.placeholder.com/150?text=Salt",
     },
   ];
 
-  // Slider settings for the carousel
   const sliderSettings = {
     dots: true,
     infinite: true,
     speed: 500,
+    autoplay: true, // Enable autoplay
+    autoplaySpeed: 3000, // Set the speed (in milliseconds) for each slide to be visible
     slidesToShow: 3,
     slidesToScroll: 1,
     responsive: [
@@ -100,7 +123,6 @@ const Home = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      {/* Hero Section */}
       <section
         style={{
           background: "linear-gradient(135deg, #ff7e5f, #feb47b)",
@@ -130,7 +152,6 @@ const Home = () => {
         </button>
       </section>
 
-      {/* Featured Products Section with Carousel */}
       <section>
         <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
           Featured Products
@@ -161,7 +182,21 @@ const Home = () => {
                   }}
                 />
                 <h4>{product.name}</h4>
-                <p>Price: ${product.price.toFixed(2)}</p>
+                <p>Price: RP {product.price.toLocaleString()}</p>
+                <button
+                  onClick={() => addToCart(product)}
+                  style={{
+                    marginTop: "10px",
+                    padding: "10px 20px",
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           ))}

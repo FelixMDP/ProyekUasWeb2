@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('Nama_Produk');
             $table->integer('Jumlah_Stok');
             $table->integer('Harga');
+            $table->string('Category');
             $table->timestamps();
         }); 
     }

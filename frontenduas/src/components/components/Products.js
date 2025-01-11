@@ -1,175 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import AddProductsForm from "./AddProductsForm"; // Import the AddProductForm component
 
 function Products() {
-  // Extended list of products with categories and images
-  const products = [
-    // Fruits
-    {
-      id: 1,
-      name: "Apple",
-      category: "Fruits",
-      price: 1.2,
-      image: "https://via.placeholder.com/150?text=Apple",
-    },
-    {
-      id: 2,
-      name: "Banana",
-      category: "Fruits",
-      price: 0.8,
-      image: "https://via.placeholder.com/150?text=Banana",
-    },
-    {
-      id: 3,
-      name: "Orange",
-      category: "Fruits",
-      price: 1.5,
-      image: "https://via.placeholder.com/150?text=Orange",
-    },
-    {
-      id: 4,
-      name: "Mango",
-      category: "Fruits",
-      price: 2.0,
-      image: "https://via.placeholder.com/150?text=Mango",
-    },
+  const [products, setProducts] = useState([]); // State to store products
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [filteredProducts, setFilteredProducts] = useState([]); // State for filtered products
+  const [showForm, setShowForm] = useState(false); // State to show or hide the form
 
-    // Staple Foods
-    {
-      id: 5,
-      name: "Rice",
-      category: "Staple Food",
-      price: 5.0,
-      image: "https://via.placeholder.com/150?text=Rice",
-    },
-    {
-      id: 6,
-      name: "Flour",
-      category: "Staple Food",
-      price: 3.5,
-      image: "https://via.placeholder.com/150?text=Flour",
-    },
-    {
-      id: 7,
-      name: "Sugar",
-      category: "Staple Food",
-      price: 2.5,
-      image: "https://via.placeholder.com/150?text=Sugar",
-    },
-    {
-      id: 8,
-      name: "Salt",
-      category: "Staple Food",
-      price: 0.5,
-      image: "https://via.placeholder.com/150?text=Salt",
-    },
-
-    // Vegetables
-    {
-      id: 9,
-      name: "Carrot",
-      category: "Vegetables",
-      price: 1.0,
-      image: "https://via.placeholder.com/150?text=Carrot",
-    },
-    {
-      id: 10,
-      name: "Tomato",
-      category: "Vegetables",
-      price: 1.2,
-      image: "https://via.placeholder.com/150?text=Tomato",
-    },
-    {
-      id: 11,
-      name: "Potato",
-      category: "Vegetables",
-      price: 0.9,
-      image: "https://via.placeholder.com/150?text=Potato",
-    },
-    {
-      id: 12,
-      name: "Onion",
-      category: "Vegetables",
-      price: 1.1,
-      image: "https://via.placeholder.com/150?text=Onion",
-    },
-
-    // Beverages
-    {
-      id: 13,
-      name: "Milk",
-      category: "Beverages",
-      price: 2.0,
-      image: "https://via.placeholder.com/150?text=Milk",
-    },
-    {
-      id: 14,
-      name: "Tea",
-      category: "Beverages",
-      price: 1.5,
-      image: "https://via.placeholder.com/150?text=Tea",
-    },
-    {
-      id: 15,
-      name: "Coffee",
-      category: "Beverages",
-      price: 3.0,
-      image: "https://via.placeholder.com/150?text=Coffee",
-    },
-    {
-      id: 16,
-      name: "Juice",
-      category: "Beverages",
-      price: 2.5,
-      image: "https://via.placeholder.com/150?text=Juice",
-    },
-
-    // Snacks
-    {
-      id: 17,
-      name: "Chips",
-      category: "Snacks",
-      price: 1.5,
-      image: "https://via.placeholder.com/150?text=Chips",
-    },
-    {
-      id: 18,
-      name: "Cookies",
-      category: "Snacks",
-      price: 2.0,
-      image: "https://via.placeholder.com/150?text=Cookies",
-    },
-    {
-      id: 19,
-      name: "Biscuits",
-      category: "Snacks",
-      price: 1.8,
-      image: "https://via.placeholder.com/150?text=Biscuits",
-    },
-    {
-      id: 20,
-      name: "Popcorn",
-      category: "Snacks",
-      price: 1.2,
-      image: "https://via.placeholder.com/150?text=Popcorn",
-    },
-  ];
-
-  // State for search query and filtered products
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  // Fetch products from the backend when the component mounts
+  useEffect(() => {
+    fetch("http://localhost:8000/api/products") // Replace with your actual Laravel API URL
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data); // Set the products state with the data fetched
+        setFilteredProducts(data); // Set the filteredProducts state as well
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }, []);
 
   // Handle search input change
   const handleSearchChange = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
 
-    // Filter products based on search query
     const filtered = products.filter(
       (product) =>
-        product.name.toLowerCase().includes(query) ||
+        product.Nama_Produk.toLowerCase().includes(query) ||
         product.category.toLowerCase().includes(query)
     );
     setFilteredProducts(filtered);
+  };
+
+  // Function to handle adding a new product
+  const handleAddProduct = (newProduct) => {
+    // Make a POST request to Laravel to add the new product
+    fetch("http://localhost:8000/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts((prevProducts) => [...prevProducts, data]); // Update the list of products
+        setFilteredProducts((prevProducts) => [...prevProducts, data]); // Update the filtered products as well
+      })
+      .catch((error) => {
+        console.error("Error adding product:", error);
+      });
+
+    setShowForm(false); // Close the form after submission
+  };
+
+  // Function to show or hide the form
+  const toggleForm = () => {
+    setShowForm(!showForm);
   };
 
   return (
@@ -199,6 +87,32 @@ function Products() {
         />
       </div>
 
+      {/* Add Product Button */}
+      <button
+        onClick={toggleForm}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#4CAF50",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          marginBottom: "20px",
+          cursor: "pointer",
+        }}
+      >
+        Add Product
+      </button>
+
+      {/* Conditionally render the AddProductForm */}
+      {showForm && (
+        <div>
+          <AddProductsForm
+            onAddProduct={handleAddProduct}
+            closeForm={toggleForm}
+          />
+        </div>
+      )}
+
       {/* Product List */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {filteredProducts.map((product) => (
@@ -214,8 +128,8 @@ function Products() {
             }}
           >
             <img
-              src={product.image}
-              alt={product.name}
+              src={product.Image_Path}
+              alt={product.Nama_Produk}
               style={{
                 width: "150px",
                 height: "150px",
@@ -224,9 +138,9 @@ function Products() {
                 marginBottom: "10px",
               }}
             />
-            <h3>{product.name}</h3>
+            <h3>{product.Nama_Produk}</h3>
             <p>Category: {product.category}</p>
-            <p>Price: ${product.price.toFixed(2)}</p>
+            <p>Price: ${product.Harga.toFixed(2)}</p>
             <button
               style={{
                 marginTop: "10px",
@@ -237,7 +151,7 @@ function Products() {
                 borderRadius: "5px",
                 cursor: "pointer",
               }}
-              onClick={() => alert(`${product.name} added to cart!`)}
+              onClick={() => alert(`${product.Nama_Produk} added to cart!`)}
             >
               Add to Cart
             </button>
