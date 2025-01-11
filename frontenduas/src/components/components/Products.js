@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"; // Import axios
 import AddProductsForm from "./AddProductsForm"; // Import the AddProductForm component
 
 function Products() {
@@ -7,13 +8,13 @@ function Products() {
   const [filteredProducts, setFilteredProducts] = useState([]); // State for filtered products
   const [showForm, setShowForm] = useState(false); // State to show or hide the form
 
-  // Fetch products from the backend when the component mounts
+  // Fetch products from the backend when the component mounts using Axios
   useEffect(() => {
-    fetch("http://localhost:8000/api/products") // Replace with your actual Laravel API URL
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data); // Set the products state with the data fetched
-        setFilteredProducts(data); // Set the filteredProducts state as well
+    axios
+      .get("http://localhost:8000/api/products") // Replace with your actual Laravel API URL
+      .then((response) => {
+        setProducts(response.data); // Set the products state with the data fetched
+        setFilteredProducts(response.data); // Set the filteredProducts state as well
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
@@ -33,20 +34,18 @@ function Products() {
     setFilteredProducts(filtered);
   };
 
-  // Function to handle adding a new product
+  // Function to handle adding a new product using Axios
   const handleAddProduct = (newProduct) => {
     // Make a POST request to Laravel to add the new product
-    fetch("http://localhost:8000/api/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts((prevProducts) => [...prevProducts, data]); // Update the list of products
-        setFilteredProducts((prevProducts) => [...prevProducts, data]); // Update the filtered products as well
+    axios
+      .post("http://localhost:8000/api/products", newProduct, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setProducts((prevProducts) => [...prevProducts, response.data]); // Update the list of products
+        setFilteredProducts((prevProducts) => [...prevProducts, response.data]); // Update the filtered products as well
       })
       .catch((error) => {
         console.error("Error adding product:", error);
