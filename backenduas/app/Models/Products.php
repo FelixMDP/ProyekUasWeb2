@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Anggota extends Model
+class Products extends Model
 {
-    use HasFactory;
+     use HasFactory;
 
     // Specify the table name if it's not the plural form of the model name
-    protected $table = 'Anggota';
+    protected $table = 'Products';
 
     // Define which attributes are mass assignable
     protected $fillable = [
-        'IDAnggota',
-        'Nama_Anggota',
-        'Email',
-        'Alamat',
+        'IDProduk',
+        'Image_Path',
+        'Nama_Produk',
+        'Jumlah_Stok',
+        'Harga',
     ];
 }
