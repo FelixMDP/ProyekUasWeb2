@@ -3,41 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // This method fetches all products (GET /api/products)
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $products = Products::all(); // Fetch all products from the database
-        return response()->json($products); // Return as JSON
+        $products = Products::all();
+        $data['message'] = true;
+        $data['result'] = $products;
+        return response()->json($data, Response::HTTP_OK);
     }
 
-    // This method stores a new product (POST /api/products)
+    public function csrf()
+    {
+        return csrf_token();
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        // Validate the form data
-        $request->validate([
-            'IDProduk' => 'required|string|max:255',
-            'Image_Path' => 'required|string|max:255',
-            'Nama_Produk' => 'required|string|max:255',
-            'Jumlah_Stok' => 'required|integer|max:100',
-            'Harga' => 'required|integer|max:100',
-            'Category' => 'required|string|max:255',
-        ]);
+        $validate = $request->validate(
+            [
+                'nama_produk' => 'required|string|max:255',
+                'jumlah' => 'required|integer',
+                'harga' => 'required|integer',
+                'gambar' => 'required|string',
+                'kategori' => 'required|string',
+            ],
+            [
+                'nama_produk.required' => 'Nama Barang wajib diisi',
+                'jumlah.required' => 'Jumlah barang perlu diisi',
+                'harga.required' => 'Harga barang perlu diisi',
+                'Kategori.required' => 'Deskripsi wajib diisi',
+                'gambar.required' => 'Gambar wajib diisi',
+            ]
+        );
 
-        // Create the product in the database
-        Products::create([
-            'IDProduk' => $request->IDProduk,
-            'Image_Path' => $request->Image_Path,
-            'Nama_Produk' => $request->Nama_Produk,
-            'Jumlah_Stok' => $request->Jumlah_Stok,
-            'Harga' => $request->Harga,
-            'Category' => $request->Category,
-        ]);
-
-        // Return a response indicating success
-        return response()->json(['message' => 'Product created successfully'], 201);
+        $result = Products::create($validate);
+        $data['success'] = true;
+        $data['message'] = 'Data berhasil ditambahkan';
+        $data['result'] = $result;
+        return response()->json(['message' => 'Data berhasil disimpan'], Response::HTTP_CREATED);
     }
-}
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Products $products)
+    {
+        $products = Products::find($products);
+        $data['success'] = true;
+        $data['message'] = "Detail data barang";
+        $data['result'] = $products;
+        return response()->json($data, Response::HTTP_OK);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+};

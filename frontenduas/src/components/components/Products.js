@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios
 import AddProductsForm from "./AddProductsForm"; // Import the AddProductForm component
 
+axios.defaults.withCredentials = true;
+
+axios.get("http://your-backend-url/api/endpoint", {
+  headers: {
+    "X-CSRF-TOKEN": document
+      .querySelector('meta[name="csrf-token"]')
+      .getAttribute("content"),
+  },
+});
+
 function Products() {
   const [products, setProducts] = useState([]); // State to store products
   const [searchQuery, setSearchQuery] = useState(""); // State for search query

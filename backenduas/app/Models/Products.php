@@ -2,22 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Products extends Model
 {
-     use HasFactory;
-
-    // Specify the table name if it's not the plural form of the model name
-    protected $table = 'Products';
-
-    // Define which attributes are mass assignable
-    protected $fillable = [
-        'IDProduk',
-        'Image_Path',
-        'Nama_Produk',
-        'Jumlah_Stok',
-        'Harga',
-    ];
+    use HasFactory, HasUuids;
+    protected $fillable = ['nama_produk', 'jumlah','harga', 'gambar','kategori'];
+    
 }
