@@ -7,7 +7,7 @@ function Contact() {
 
       <div style={{ marginBottom: "20px" }}>
         <h3>Phone Number:</h3>
-        <p>+1 (123) 456-7890</p> {/* Replace with actual number */}
+        <p>+62 (123) 456-7890</p> {/* Replace with actual number */}
       </div>
 
       <div style={{ marginBottom: "20px" }}>

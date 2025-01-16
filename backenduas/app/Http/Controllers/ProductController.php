@@ -2,78 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
-use Illuminate\Http\Response;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Fetch all products
     public function index()
     {
-        $products = Products::all();
-        $data['message'] = true;
-        $data['result'] = $products;
-        return response()->json($data, Response::HTTP_OK);
+        // Get all products and return them as a JSON response
+        return response()->json(Product::all());
     }
 
-    public function csrf()
-    {
-        return csrf_token();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store a new product
     public function store(Request $request)
     {
-        $validate = $request->validate(
-            [
-                'nama_produk' => 'required|string|max:255',
-                'jumlah' => 'required|integer',
-                'harga' => 'required|integer',
-                'gambar' => 'required|string',
-                'kategori' => 'required|string',
-            ],
-            [
-                'nama_produk.required' => 'Nama Barang wajib diisi',
-                'jumlah.required' => 'Jumlah barang perlu diisi',
-                'harga.required' => 'Harga barang perlu diisi',
-                'Kategori.required' => 'Deskripsi wajib diisi',
-                'gambar.required' => 'Gambar wajib diisi',
-            ]
-        );
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+            'image_path' => 'nullable|string',
+        ]);
 
-        $result = Products::create($validate);
-        $data['success'] = true;
-        $data['message'] = 'Data berhasil ditambahkan';
-        $data['result'] = $result;
-        return response()->json(['message' => 'Data berhasil disimpan'], Response::HTTP_CREATED);
+        // Create and store the product
+        $product = Product::create($validated);
+
+        // Return the created product as a JSON response
+        return response()->json($product, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Products $products)
+    public function addProduct()
     {
-        $products = Products::find($products);
-        $data['success'] = true;
-        $data['message'] = "Detail data barang";
-        $data['result'] = $products;
-        return response()->json($data, Response::HTTP_OK);
-    }
+        // Data to be added
+        $productData = [
+            'nama_produk' => 'Product Name',
+            'category' => 'Category Name',
+            'harga' => 19.99,
+            'image_path' => 'path/to/image.jpg', // Can be null if no image
+        ];
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-};
+        // Create a new product using the data
+        $product = Product::create($productData);
+
+        // Return a response or view
+        return response()->json([
+            'message' => 'Product added successfully!',
+            'product' => $product
+        ]);
+    }
+}

@@ -1,21 +1,21 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons"; // Mengimpor ikon keranjang
-import Home from "./components/components/Home.js";
-import Products from "./components/components/Products";
-import About from "./components/components/About";
-import Contact from "./components/components/Contact";
-import Cart from "./components/components/Cart"; // Impor komponen Cart
-import Transaksi from "./components/components/Transaksi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
+import About from "./components/About";
+import Cart from "./components/Cart"; // Impor komponen Cart
+import Contact from "./components/Contact";
+import Home from "./components/Home.js";
+import Products from "./components/Products";
+import Transaksi from "./components/Transaksi";
 
 function App() {
   return (
     <Router>
       <div className="app">
         <header className="header">
-          <h1 className="logo">DAKO MART</h1>
+          <h1 className="logo"><a href="/" className="plain-link">DAKO MART</a></h1>
           <nav className="navbar">
             <Link to="/">Home</Link>
             <Link to="/products">Products</Link>

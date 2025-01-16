@@ -24,6 +24,12 @@ body {
   font-size: 1.8rem;
   font-weight: bold;
 }
+.plain-link {
+  text-decoration: none; /* Removes the underline */
+  color: white; /* Sets the text color to white */
+  font-weight: bold; /* Matches the bold font weight */
+  font-size: 2rem; /* Adjust size to match the look */
+}
 
 .navbar a {
   color: white;
